@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta name="description" content="Invisible Incident advocates for people living with unseen workplace injuries, including tinnitus and other lasting consequences.">
+  <title>Invisible Incident</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Invisible Incident home">Invisible Incident</a>
+      <ul class="nav-links">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="types-of-injury.html">Pinned Stories</a></li>
+        <li><a href="forum-for-discussion.html">Forum for Discussion</a></li>
+        <li>
+          <a class="nav-auth-link" href="profile.html" data-auth-nav-link aria-label="Log in">
+            <span class="nav-profile-avatar" data-auth-avatar aria-hidden="true"></span>
+            <span data-auth-label>Log in</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="eyebrow">Advocacy for unseen harm</p>
+        <h1 id="hero-title">Invisible Incident</h1>
+        <p class="hero-subtitle">When the injury can't be seen, but the consequences remain.</p>
+      </div>
+    </section>
+
+    <section class="section section-light" aria-labelledby="story-title">
+      <div class="section-inner">
+        <div class="story-card">
+          <h2 id="story-title">Share your story</h2>
+          <p class="story-subtitle">Workplace injuries do not have to be visible to be real, let's talk about it and support one another</p>
+
+          <div class="story-info-list" aria-label="Workplace advocacy priorities">
+            <article>
+              <h3>Documentation</h3>
+              <p>There are issues that can alter your ability to function that require a convalescing period. Please contact a doctor and/or lawyer if applicable for Worker's Compensation or other accommodations.</p>
+            </article>
+            <article>
+              <h3>Accommodation</h3>
+              <p>United States acknowledges Federal Medical Leave Act (FMLA) and Americans with Disabilities (ADA) Act. Accommodation can look different for each person.</p>
+            </article>
+            <article>
+              <h3>Accountability</h3>
+              <p>Systems should take difficult-to-measure symptoms seriously and respond with fairness. Treating invisible injuries in a liability-based system is difficult.</p>
+            </article>
+          </div>
+          <p class="story-support-note">People experiencing invisible injuries may be asked to continue working without appropriate support.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="state-ledger" aria-labelledby="state-ledger-title">
+      <div class="section-inner">
+        <div class="section-heading">
+          <p class="section-kicker">Running Ledger</p>
+          <h2 id="state-ledger-title">Reports by State</h2>
+          <p>
+            A simple state-by-state ledger for tracking where authenticated incident stories have been submitted.
+            Only states with at least one authenticated story appear here.
+          </p>
+        </div>
+
+        <div class="ledger-table-wrap" id="state-ledger-table-wrap" hidden>
+          <table class="ledger-table">
+            <caption>State report ledger</caption>
+            <thead>
+              <tr>
+                <th scope="col">State</th>
+                <th scope="col">Reports</th>
+              </tr>
+            </thead>
+            <tbody id="state-ledger-body"></tbody>
+          </table>
+        </div>
+        <p class="ledger-empty" id="state-ledger-empty">No authenticated state reports yet.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Invisible Incident. Advocacy, education, and support for invisible injuries.</p>
+  </footer>
+  <script>
+    const stateReportCounts = [];
+    const stateLedgerRows = stateReportCounts.filter(({ reports }) => Number(reports) > 0);
+    const stateLedgerBody = document.getElementById("state-ledger-body");
+    const stateLedgerTableWrap = document.getElementById("state-ledger-table-wrap");
+    const stateLedgerEmpty = document.getElementById("state-ledger-empty");
+
+    if (stateLedgerRows.length && stateLedgerBody && stateLedgerTableWrap) {
+      stateLedgerRows.forEach(({ state, reports }) => {
+        const row = document.createElement("tr");
+        const stateCell = document.createElement("th");
+        const reportCell = document.createElement("td");
+
+        stateCell.scope = "row";
+        stateCell.textContent = state;
+        reportCell.textContent = reports;
+        row.append(stateCell, reportCell);
+        stateLedgerBody.append(row);
+      });
+      stateLedgerTableWrap.hidden = false;
+      if (stateLedgerEmpty) stateLedgerEmpty.hidden = true;
+    }
+  </script>
+</body>
+</html>

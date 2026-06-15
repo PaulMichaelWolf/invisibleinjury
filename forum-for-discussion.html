@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta name="description" content="Sign up to access the Invisible Incident discussion forum.">
+  <title>Forum for Discussion | Invisible Incident</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+
+</head>
+
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Invisible Incident home">Invisible Incident</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="types-of-injury.html">Pinned Stories</a></li>
+        <li><a href="forum-for-discussion.html" aria-current="page">Forum for Discussion</a></li>
+        <li>
+          <a class="nav-auth-link" href="profile.html" data-auth-nav-link aria-label="Log in">
+            <span class="nav-profile-avatar" data-auth-avatar aria-hidden="true"></span>
+            <span data-auth-label>Log in</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="forum-gate" id="signed-out-view" aria-labelledby="signin-title">
+      <div class="signin-panel">
+        <p class="section-kicker">Forum Access</p>
+        <h1 id="signin-title">Sign up to continue</h1>
+        <p class="signin-copy">Use Google or a validated email and password to access the discussion forum.</p>
+
+        <div class="signin-options" aria-label="Sign up options">
+          <button id="google-signin-button" class="signin-button" type="button" aria-label="Continue with Google">
+            <span class="signin-icon" aria-hidden="true">G</span>
+            <span class="signin-button-text">Continue with Google</span>
+          </button>
+          <button id="email-signin-button" class="signin-button" type="button" aria-label="Continue with Email">
+            <span class="signin-icon" aria-hidden="true">@</span>
+            <span class="signin-button-text">Continue with Email</span>
+          </button>
+        </div>
+
+        <form class="email-signup" id="email-login-form">
+          <label for="email">Returning user email address login</label>
+          <div class="email-row">
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password" required>
+            <label class="remember-row" for="remember-me">
+              <input id="remember-me" name="remember-me" type="checkbox" checked>
+              <span>Remember me</span>
+            </label>
+            <button type="submit">Log in with email</button>
+          </div>
+        </form>
+      </div>
+
+      <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="forum-board" id="signed-in-view" aria-labelledby="forum-title" hidden>
+      <div class="forum-shell">
+        <div class="forum-header">
+          <div>
+            <p class="section-kicker">Discussion Forum</p>
+            <h1 id="forum-title">Community stories</h1>
+            <p>Text-based discussion for people documenting invisible injuries and workplace support questions.</p>
+          </div>
+          <a class="profile-shortcut" href="profile.html">Profile</a>
+        </div>
+
+        <div class="composer-panel" aria-label="Start a discussion">
+          <label for="discussion-title">Start a discussion</label>
+          <input id="discussion-title" type="text" placeholder="Title">
+          <textarea rows="4" placeholder="Share a question, update, or resource"></textarea>
+          <button type="button">Post</button>
+        </div>
+
+        <div class="forum-layout">
+          <aside class="forum-sidebar" aria-label="Forum sections">
+            <a href="#pinned">Pinned</a>
+            <a href="#latest">Latest</a>
+            <a href="#resources">Resources</a>
+          </aside>
+
+          <div class="post-list" id="forum-post-list" aria-live="polite">
+            <p class="forum-loading">Loading discussion posts...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

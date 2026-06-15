@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta name="description" content="Confirm an email OTP for Invisible Incident.">
+  <title>Email OTP Verification | Invisible Incident</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html" aria-label="Invisible Incident home">Invisible Incident</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="types-of-injury.html">Pinned Stories</a></li>
+        <li><a href="forum-for-discussion.html">Forum for Discussion</a></li>
+        <li>
+          <a class="nav-auth-link" href="profile.html" data-auth-nav-link aria-label="Log in">
+            <span class="nav-profile-avatar" data-auth-avatar aria-hidden="true"></span>
+            <span data-auth-label>Log in</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="forum-gate" aria-labelledby="email-otp-title">
+      <div class="signin-panel">
+        <p class="section-kicker">Email OTP</p>
+        <h1 id="email-otp-title">Confirm your email</h1>
+        <p class="signin-copy">Send a Supabase one-time code to your email address. This does not use phone or SMS verification.</p>
+
+        <div class="phone-verification-panel" id="phone-verification-section">
+          <div class="profile-field">
+            <label for="profile-email-otp-address">Email address</label>
+            <div class="phone-verification-row">
+              <input id="profile-email-otp-address" name="email-otp-address" type="email" autocomplete="email" placeholder="you@example.com">
+              <button id="email-otp-send" type="button">Send OTP</button>
+            </div>
+          </div>
+
+          <div class="profile-field">
+            <label for="profile-email-otp-code">One-time code</label>
+            <div class="phone-verification-row">
+              <input id="profile-email-otp-code" name="email-otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="One-time code">
+              <button id="email-otp-verify" type="button">Confirm OTP</button>
+            </div>
+          </div>
+
+          <p class="phone-status" id="email-otp-status">Email OTP not confirmed.</p>
+          <a class="profile-shortcut" href="profile.html">Back to profile</a>
+        </div>
+
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
