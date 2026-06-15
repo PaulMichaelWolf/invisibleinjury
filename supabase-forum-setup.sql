@@ -207,8 +207,8 @@ revoke execute on function public.update_forum_display_name(text, text) from ano
 -- Signed-in users may only read and create forum posts.
 grant select, insert on table public.forum_posts to authenticated;
 
--- Signed-in users may read their profile and update their forum display name through the RPC.
-grant select on table public.user_profiles to authenticated;
+-- Signed-in users may read and update only their own profile row through RLS.
+grant select, insert, update on table public.user_profiles to authenticated;
 grant execute on function public.update_forum_display_name(text, text) to authenticated;
 
 -- Signed-in users may read and create comments.

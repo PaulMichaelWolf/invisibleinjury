@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-store">
-  <meta name="description" content="View your Invisible Incident profile.">
-  <title>Profile | Invisible Incident</title>
+  <meta name="description" content="Update your Invisible Incident account.">
+  <title>Account | Invisible Incident</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
@@ -31,55 +31,29 @@
   </header>
 
   <main id="main-content">
-    <section class="forum-gate" id="signed-out-view" aria-labelledby="profile-signup-title">
+    <section class="forum-gate" id="signed-out-view" aria-labelledby="account-login-title">
       <div class="signin-panel">
-        <p class="section-kicker">Profile Setup</p>
-        <h1 id="profile-signup-title">Sign up to set up your profile</h1>
-        <p class="signin-copy">Use Google or a validated email and password to create or access your Invisible Incident profile.</p>
-
-        <div class="signin-options" aria-label="Profile sign-up options">
-          <button id="google-signin-button" class="signin-button" type="button" aria-label="Continue with Google">
-            <span class="signin-icon" aria-hidden="true">G</span>
-            <span class="signin-button-text">Continue with Google</span>
-          </button>
-
-          <button id="email-signin-button" class="signin-button" type="button" aria-label="Continue with Email">
-            <span class="signin-icon" aria-hidden="true">@</span>
-            <span class="signin-button-text">Continue with Email</span>
-          </button>
-        </div>
-
-        <form class="email-signup" id="email-login-form">
-          <label for="email">Returning user email address login</label>
-          <div class="email-row">
-            <input id="email" name="email" type="email" autocomplete="off" placeholder="you@example.com" required>
-            <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Password" required>
-            <label class="remember-row" for="remember-me">
-              <input id="remember-me" name="remember-me" type="checkbox">
-              <span>Remember me</span>
-            </label>
-            <button type="submit">Log in with email</button>
-          </div>
-        </form>
-
-        <p class="auth-message" id="profile-auth-message" role="status" aria-live="polite"></p>
+        <p class="section-kicker">Account</p>
+        <h1 id="account-login-title">Sign in to manage your account</h1>
+        <p class="signin-copy">Log in to update your profile icon, name, and account settings.</p>
+        <a class="profile-shortcut" href="profile.html">Log in</a>
+        <p class="auth-message" id="account-auth-message" role="status" aria-live="polite"></p>
       </div>
     </section>
 
     <section class="profile-page" id="signed-in-view" hidden>
       <div class="profile-panel">
-        <p class="section-kicker">Profile</p>
-        <h1>Your profile</h1>
+        <p class="section-kicker">Account</p>
+        <h1>Your account</h1>
         <div class="profile-summary">
           <span class="profile-photo-large" data-profile-avatar aria-hidden="true"></span>
           <div>
             <p>Signed in as</p>
             <strong id="user-email"></strong>
-            <p class="profile-login-note">Use this email address for future password logins.</p>
           </div>
         </div>
 
-        <div class="profile-form" aria-label="Profile details">
+        <div class="profile-form" aria-label="Account details">
           <div class="profile-field">
             <label for="profile-icon-input">Profile icon</label>
             <div class="profile-icon-row">
@@ -148,24 +122,49 @@
             </div>
           </div>
 
-          <div class="profile-field">
-            <label for="profile-username-preview">Current community username</label>
+          <div class="profile-field" hidden>
+            <label for="profile-username-preview">Google account name</label>
             <input id="profile-username-preview" name="profile-username-preview" type="text" readonly aria-readonly="true" placeholder="First-Last">
           </div>
 
-          <div class="profile-field" id="profile-password-section">
-            <label for="profile-password-input">Password login</label>
-            <div class="profile-password-stack">
-              <input id="profile-password-input" name="profile-password" type="password" autocomplete="new-password" minlength="8" placeholder="Create password">
-              <div class="password-strength-slot" id="password-strength-slot" data-strength="empty" aria-live="polite">
-                <span class="password-strength-fill" aria-hidden="true"></span>
-                <span class="password-strength-label">Password strength</span>
-              </div>
-              <input id="profile-password-confirm" name="profile-password-confirm" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm password">
-              <button id="profile-password-save" type="button" disabled>Save profile setup</button>
+        </div>
+
+        <div class="profile-section-divider" aria-hidden="true"></div>
+
+        <div class="forum-name-panel" id="forum-name-section">
+          <div class="profile-field">
+            <label for="forum-display-current">Current community username</label>
+            <input id="forum-display-current" name="forum-display-current" type="text" readonly aria-readonly="true" placeholder="Visible forum name">
+            <p>This is the username other members will see when you contribute to the shared community forum.</p>
+            <div class="forum-name-row">
+              <input id="forum-display-first-name" name="forum-display-first-name" type="text" autocomplete="given-name" placeholder="First name">
+              <input id="forum-display-last-name" name="forum-display-last-name" type="text" autocomplete="family-name" placeholder="Last name">
+              <button id="forum-display-save" type="button" disabled>Update visible name</button>
+            </div>
+            <p class="forum-name-warning" id="visible-name-warning">Update to visible name can be performed after OTP has been confirmed.</p>
+          </div>
+
+          <div class="profile-field account-password-panel" id="account-password-section">
+            <label for="account-password-input">Update password</label>
+            <p>Confirm email OTP before changing the password for this signed-in email address.</p>
+            <div class="account-password-row">
+              <input id="account-password-input" name="account-password" type="password" autocomplete="new-password" minlength="8" placeholder="New password">
+              <input id="account-password-confirm" name="account-password-confirm" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm new password">
+              <button id="account-password-save" type="button" disabled>Update password</button>
+            </div>
+            <p class="forum-name-warning">Update to password or visible name can be performed after OTP has been performed.</p>
+          </div>
+
+          <div class="profile-field phone-verification-panel" id="phone-verification-section">
+            <label for="email-otp-checkbox">Email OTP status</label>
+            <div class="phone-status-row">
+              <a class="profile-shortcut" id="email-otp-link" href="profile-otp-validation.html?return=account.html">Verify email OTP</a>
+              <label class="phone-check-row visually-hidden" for="email-otp-checkbox">
+                <input id="email-otp-checkbox" type="checkbox" disabled>
+                <span id="email-otp-status">Email OTP not confirmed.</span>
+              </label>
             </div>
           </div>
-          <button class="profile-shortcut profile-password-toggle" id="profile-password-toggle" type="button" hidden>Create profile</button>
         </div>
 
         <div class="profile-section-divider" aria-hidden="true"></div>
