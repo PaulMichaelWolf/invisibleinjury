@@ -6,9 +6,9 @@
   <meta http-equiv="Cache-Control" content="no-store">
   <meta name="description" content="Invisible Incident advocates for people living with unseen workplace injuries, including tinnitus and other lasting consequences.">
   <title>Invisible Incident</title>
-  <link rel="stylesheet" href="styles.css?v=16">
+  <link rel="stylesheet" href="styles.css?v=146">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="auth.js?v=16" defer></script>
+  <script src="auth.js?v=146" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -33,9 +33,92 @@
   <main id="main-content">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-content">
-        <p class="eyebrow">Advocacy for unseen harm</p>
-        <h1 id="hero-title">Invisible Incident</h1>
-        <p class="hero-subtitle">When the injury can't be seen, but the consequences remain.</p>
+        <div class="hero-copy">
+          <p class="eyebrow">Advocacy for unseen harm</p>
+          <h1 id="hero-title">Invisible Incident</h1>
+          <p class="hero-subtitle">A website to discuss the overlapping issue between those living close to data centers and those affected by tinnitus, noise.</p>
+        </div>
+        <div class="hero-venn" aria-label="Four overlapping areas for conditions without cure, instigating external issues, people not sensitive to noise, and people sensitive to noise">
+          <svg class="hero-venn-diagram" viewBox="0 0 420 420" role="img" aria-labelledby="venn-title venn-desc">
+            <title id="venn-title">Invisible Incident four-circle Venn diagram</title>
+            <desc id="venn-desc">Four circles labeled conditions without cure, instigating external issues, people not sensitive to noise, and people sensitive to noise intersect around invisible incidents.</desc>
+            <defs>
+              <marker id="venn-arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0 0l10 5-10 5z" fill="#ffffff" stroke="#071527" stroke-width="1.2" stroke-linejoin="round"></path>
+              </marker>
+              <marker id="venn-arrowhead-dark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 0l10 5-10 5z" fill="#071527" stroke="none"></path>
+              </marker>
+            </defs>
+            <circle class="venn-circle venn-circle-a" cx="158" cy="168" r="122"></circle>
+            <circle class="venn-circle venn-circle-b" cx="262" cy="168" r="122"></circle>
+            <circle class="venn-circle venn-circle-c" cx="158" cy="262" r="122"></circle>
+            <circle class="venn-circle venn-circle-d" cx="262" cy="262" r="122"></circle>
+            <text class="venn-label" x="52" y="48">Current solution</text>
+            <text class="venn-label" x="404" y="40">External triggers</text>
+            <text class="venn-label" x="404" y="60">and environments</text>
+            <text class="venn-label" x="68" y="390">Conditions</text>
+            <text class="venn-label" x="68" y="410">without cure</text>
+            <text class="venn-label" x="354" y="390">Gaps in</text>
+            <text class="venn-label" x="354" y="410">system coverage</text>
+            <g class="venn-icon" transform="translate(100 316) scale(0.48)">
+              <path d="M38 90c5-10 14-16 27-16 12 0 21 6 27 16"></path>
+              <circle cx="63" cy="43" r="29"></circle>
+              <g transform="rotate(30 68 46)">
+                <path d="M58 45c0-6 4-10 10-10 6 0 10 4 10 10 0 5-3 9-8 12"></path>
+                <path d="M64 47c2-3 6-3 8 0"></path>
+              </g>
+              <path class="venn-icon-highlight" transform="rotate(165 99.5 38)" d="M84 29h22l-6 6h17L85 50l9-11H78z"></path>
+              <path class="venn-icon-highlight" transform="rotate(225 99.5 62)" d="M84 53h22l-6 6h17L85 74l9-11H78z"></path>
+            </g>
+            <text class="venn-overlap-text" x="130" y="369">Tinnitus</text>
+            <g class="venn-icon" transform="translate(298 74) scale(0.4)">
+              <path d="M8 70l18-16 18 16v30H8z"></path>
+              <path d="M20 100V82h13v18"></path>
+              <path d="M76 28h32v72H76z"></path>
+              <path d="M84 40h15M84 52h15M84 64h15M84 76h15"></path>
+              <path class="venn-icon-light" d="M51 31c1 13 7 24 17 34"></path>
+              <path class="venn-icon-light" d="M37 31c1 10 5 18 13 26"></path>
+            </g>
+            <text class="venn-overlap-text" x="321" y="128">Data center</text>
+            <g class="venn-icon" transform="translate(66 60) scale(0.56)">
+              <path d="M30 96V48l20-12 10 16 10-16 20 12v48z"></path>
+              <path d="M48 38l12 14 12-14"></path>
+              <path class="venn-icon-highlight" d="M54 52h12l-3 10h-6z"></path>
+              <path class="venn-icon-highlight" d="M57 62h6l6 26-9 10-9-10z"></path>
+              <path d="M42 58h-8"></path>
+              <path d="M86 58h-8"></path>
+            </g>
+            <g class="venn-icon" transform="translate(176 174) scale(0.54)">
+              <circle cx="60" cy="35" r="17"></circle>
+              <path class="venn-mask" d="M48 36c8 6 17 6 25 0v12c-8 5-17 5-25 0z"></path>
+              <path d="M41 58c12 8 27 8 39 0l9 34H32z"></path>
+            </g>
+            <text class="venn-center-text" x="208" y="236">Stay sick</text>
+            <text class="venn-overlap-text venn-overlap-text-small" x="98" y="126">Consult applicable</text>
+            <text class="venn-overlap-text venn-overlap-text-small" x="98" y="138">professional</text>
+            <g class="venn-icon" transform="translate(284 302) scale(0.42)">
+              <path d="M24 24h72v44H52L34 84V68H24z"></path>
+              <path d="M38 40h44"></path>
+              <path d="M38 54h28"></path>
+            </g>
+            <text class="venn-overlap-text" x="310" y="352">Advocacy</text>
+            <text class="venn-overlap-text" x="210" y="102">Media coverage</text>
+            <text class="venn-overlap-text" x="210" y="114">lacking community</text>
+            <text class="venn-overlap-text" x="210" y="126">consensus</text>
+            <text class="venn-overlap-text" x="164" y="160">Status</text>
+            <text class="venn-overlap-text" x="164" y="172">quo</text>
+            <text class="venn-overlap-text" x="100" y="218">Non-profit funding</text>
+            <text class="venn-overlap-text" x="100" y="232">of medical</text>
+            <text class="venn-overlap-text" x="100" y="246">research</text>
+            <polygon points="204.6,130.8 184.3,146.2 181.9,143 178,156 191.6,155.7 189.2,152.5 209.4,137.2" fill="#071527"></polygon>
+            <polygon points="205.8,132.4 184,149 181.8,146.2 178,156 188.5,154.9 186.4,152.2 208.2,135.6" fill="#ffffff"></polygon>
+            <polygon points="124.6,213 150.4,190.3 153,193.3 156,180 142.5,181.3 145.1,184.3 119.4,207" fill="#071527"></polygon>
+            <polygon points="123.3,211.5 150.6,187.5 152.9,190.1 156,180 145.6,181.8 147.9,184.5 120.7,208.5" fill="#ffffff"></polygon>
+            <text class="venn-center-text" x="256" y="272">Invisible</text>
+            <text class="venn-center-text" x="256" y="284">incident</text>
+          </svg>
+        </div>
       </div>
     </section>
 
@@ -43,7 +126,7 @@
       <div class="section-inner">
         <div class="story-card">
           <h2 id="story-title">Share your story</h2>
-          <p class="story-subtitle">Workplace injuries do not have to be visible to be real, let's talk about it and support one another</p>
+          <p class="story-subtitle">Dedicated forums for individual issues or those affecting your community.</p>
 
           <div class="story-info-list" aria-label="Workplace advocacy priorities">
             <article>
@@ -52,11 +135,11 @@
             </article>
             <article>
               <h3>Community Support</h3>
-              <p>Behind every instigating incident, there is a story. The United States provides benefits through Federal Medical Leave Act (FMLA) and Americans with Disabilities (ADA) Act. However, not all issues are acknowledged within private sector accomodations. This makes some incidents, <strong class="text-alert">invisible</strong>.</p>
+              <p>The United States provides benefits through Federal Medical Leave Act (FMLA) and Americans with Disabilities (ADA) Act. However, not all issues are acknowledged making some incidents, <strong class="text-alert">invisible</strong> to protections.</p>
             </article>
             <article>
               <h3>Accountability</h3>
-              <p>Systems should take difficult-to-measure symptoms seriously and respond with fairness. Burden of proof for invisible incidents in a liability-informed medical system is, <strong class="text-alert">missing</strong>. This platform could aid in organizing for reform through political action or non-profit.</p>
+              <p>Systems should take difficult-to-measure symptoms seriously and respond with fairness. Burden of proof that is needed for the liability aspects of modern medicine system is <strong class="text-alert">missing</strong> in some cases. There needs to be resources for those that fall outside the existing support frameworks.</p>
             </article>
           </div>
           <p class="story-support-note">People experiencing invisible injuries may be asked to continue working without appropriate support.</p>
