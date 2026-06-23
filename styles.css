@@ -201,6 +201,18 @@ input:focus-visible {
   text-decoration: none;
 }
 
+button.profile-shortcut {
+  font: inherit;
+  cursor: pointer;
+}
+
+.forum-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
 .hero {
   display: grid;
   min-height: auto;
@@ -754,11 +766,14 @@ p {
 }
 
 .composer-panel label {
+  display: grid;
+  gap: 0.35rem;
   color: var(--navy-900);
   font-weight: 700;
 }
 
 .composer-panel input,
+.composer-panel select,
 .composer-panel textarea {
   width: 100%;
   padding: 0.8rem 0.9rem;
@@ -780,6 +795,61 @@ p {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+}
+
+.composer-panel button:disabled {
+  border-color: var(--border);
+  color: var(--muted);
+  background: #eef3f8;
+  cursor: not-allowed;
+}
+
+.composer-panel .secondary-composer-button {
+  border-color: var(--border);
+  color: var(--navy-900);
+  background: var(--white);
+}
+
+.recovery-timeline {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0.25rem 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.recovery-timeline legend {
+  padding: 0 0.35rem;
+  color: var(--navy-900);
+  font-weight: 800;
+}
+
+.recovery-stage {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+.recovery-stage:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.recovery-date-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.recovery-links {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.recovery-link-button {
+  margin-top: -0.15rem;
 }
 
 .forum-layout {
@@ -831,6 +901,16 @@ p {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   background: var(--white);
+}
+
+.post-copy {
+  white-space: normal;
+}
+
+.post-copy a {
+  color: var(--navy-700);
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .pinned-post {
@@ -1346,6 +1426,10 @@ p {
 
   .forum-sidebar {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .recovery-date-row {
+    grid-template-columns: 1fr;
   }
 
   .discussion-post {

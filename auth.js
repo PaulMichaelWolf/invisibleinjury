@@ -156,6 +156,14 @@ const emailOtpLink = document.getElementById("email-otp-link");
 const emailOtpStatus = document.getElementById("email-otp-status");
 const emailOtpCheckbox = document.getElementById("email-otp-checkbox");
 const forumPostList = document.getElementById("forum-post-list");
+const authRequiredLinks = Array.from(document.querySelectorAll("[data-requires-auth]"));
+const storySubmitForm = document.getElementById("story-submit-form");
+const storyTitleInput = document.getElementById("story-title");
+const storyCategoryInput = document.getElementById("story-category");
+const storyBodyInput = document.getElementById("story-body");
+const storySubmitButton = document.getElementById("story-submit-button");
+const makeStoryButton = document.getElementById("make-story-button");
+const addRecoveryStageButton = document.querySelector("[data-add-recovery-stage]");
 
 function removeVersionQueryFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -183,18 +191,33 @@ function getAuthRedirectUrl() {
   return getCurrentPageAuthRedirectUrl();
 }
 
-function getCurrentPageAuthRedirectUrl() {
-  const isLocal =
-    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-  const isProfilePage = window.location.pathname.endsWith("/profile.html");
-  const path = isProfilePage ? "profile.html" : "forum-for-discussion.html";
+function isLocalHostname(hostname) {
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
 
-  return isLocal ? `${window.location.origin}/${path}` : `https://invisibleincident.com/${path}`;
+function isCompatibleRedirectUrl(redirectUrl) {
+  try {
+    const target = new URL(redirectUrl, window.location.origin);
+    const currentIsLocal = isLocalHostname(window.location.hostname);
+    const targetIsLocal = isLocalHostname(target.hostname);
+
+    return currentIsLocal ? targetIsLocal : !targetIsLocal;
+  } catch (_error) {
+    return false;
+  }
+}
+
+function getCurrentPageAuthRedirectUrl() {
+  const isLocal = isLocalHostname(window.location.hostname);
+  const origin = isLocal ? window.location.origin : "https://invisibleincident.com";
+  const path = window.location.pathname === "/" ? "/index.html" : window.location.pathname;
+  const search = window.location.search || "";
+
+  return `${origin}${path}${search}`;
 }
 
 function getProfileRedirectUrl() {
-  const isLocal =
-    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  const isLocal = isLocalHostname(window.location.hostname);
   const origin = isLocal ? window.location.origin : "https://invisibleincident.com";
 
   return `${origin}/profile.html`;
@@ -247,6 +270,10 @@ function isAccountPage() {
 
 function isProfileOtpValidationPage() {
   return window.location.pathname.endsWith("/profile-otp-validation.html");
+}
+
+function isStorySubmissionPage() {
+  return window.location.pathname.endsWith("/types-of-injury/report-your-injury.html");
 }
 
 function getProfileOtpReturnPath() {
@@ -326,35 +353,65 @@ function markAccountCreationLinkConsumed(session) {
 
 function rememberPostLoginRedirect() {
   try {
-    window.localStorage.setItem(POST_LOGIN_REDIRECT_KEY, getCurrentPageAuthRedirectUrl());
+    if (!window.localStorage.getItem(POST_LOGIN_REDIRECT_KEY)) {
+      window.localStorage.setItem(POST_LOGIN_REDIRECT_KEY, getCurrentPageAuthRedirectUrl());
+    }
   } catch (_error) {
   }
 }
 
 function rememberProfileSetupRedirect() {
   try {
-    window.localStorage.setItem(POST_LOGIN_REDIRECT_KEY, getProfileRedirectUrl());
+    if (!window.localStorage.getItem(POST_LOGIN_REDIRECT_KEY)) {
+      window.localStorage.setItem(POST_LOGIN_REDIRECT_KEY, getProfileRedirectUrl());
+    }
+  } catch (_error) {
+  }
+}
+
+function rememberRedirectUrl(redirectUrl) {
+  try {
+    window.localStorage.setItem(POST_LOGIN_REDIRECT_KEY, redirectUrl);
   } catch (_error) {
   }
 }
 
 function getRememberedPostLoginRedirect() {
   try {
-    return window.localStorage.getItem(POST_LOGIN_REDIRECT_KEY) || "";
+    const redirectUrl = window.localStorage.getItem(POST_LOGIN_REDIRECT_KEY) || "";
+
+    if (!redirectUrl) return "";
+
+    if (!isCompatibleRedirectUrl(redirectUrl)) {
+      window.localStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
+      return "";
+    }
+
+    return redirectUrl;
   } catch (_error) {
     return "";
   }
 }
 
+function consumePostLoginRedirect(fallbackUrl = "") {
+  try {
+    const redirectUrl = window.localStorage.getItem(POST_LOGIN_REDIRECT_KEY) || fallbackUrl;
+    window.localStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
+    return redirectUrl;
+  } catch (_error) {
+    return fallbackUrl;
+  }
+}
+
 function redirectAfterLoginIfNeeded(session) {
-  if (!session?.user) return;
+  if (!session?.user) return false;
 
   try {
     const redirectUrl =
-      window.localStorage.getItem(POST_LOGIN_REDIRECT_KEY) ||
+      getRememberedPostLoginRedirect() ||
       (hasAuthTokensInUrl() && isHomePage() ? getAuthRedirectUrl() : "");
 
-    if (!redirectUrl) return;
+    if (!redirectUrl) return false;
 
     const target = new URL(redirectUrl, window.location.origin);
     const currentPath = window.location.pathname.replace(/\/$/, "/index.html");
@@ -362,20 +419,38 @@ function redirectAfterLoginIfNeeded(session) {
 
     if (currentPath === targetPath) {
       window.localStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
-      return;
+      return false;
     }
 
     window.localStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
     window.location.replace(target.href);
+    return true;
   } catch (_error) {
   }
+
+  return false;
 }
+
+function redirectToLoginForStorySubmission(session) {
+  if (!isStorySubmissionPage() || session?.user) return false;
+
+  rememberRedirectUrl(getCurrentPageAuthRedirectUrl());
+  window.location.replace(getForumLink());
+  return true;
+}
+
+makeStoryButton?.addEventListener("click", () => {
+  if (!storySubmitForm) return;
+
+  storySubmitForm.hidden = false;
+  storyTitleInput?.focus();
+});
 
 googleButton?.addEventListener("click", async () => {
   if (!supabaseClient) return;
 
   rememberPostLoginRedirect();
-  const redirectUrl = getCurrentPageAuthRedirectUrl();
+  const redirectUrl = getAuthRedirectUrl();
 
   const { error } = await supabaseClient.auth.signInWithOAuth({
     provider: "google",
@@ -392,6 +467,18 @@ googleButton?.addEventListener("click", async () => {
 emailButton?.addEventListener("click", () => {
   rememberProfileSetupRedirect();
   window.location.href = getEmailVerificationLink();
+});
+
+authRequiredLinks.forEach((link) => {
+  link.addEventListener("click", (event) => {
+    const user = currentSessionUser || getStoredSession()?.user;
+
+    if (user) return;
+
+    event.preventDefault();
+    rememberRedirectUrl(new URL(link.getAttribute("href"), window.location.href).href);
+    window.location.href = getForumLink();
+  });
 });
 
 if (
@@ -1453,6 +1540,130 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
+function renderLinkedText(value) {
+  const urlPattern = /(https?:\/\/[^\s<>"']+)/g;
+
+  return String(value ?? "")
+    .split(urlPattern)
+    .map((part) => {
+      if (!part.startsWith("http://") && !part.startsWith("https://")) return escapeHtml(part);
+
+      try {
+        const url = new URL(part);
+
+        if (url.protocol !== "http:" && url.protocol !== "https:") {
+          return escapeHtml(part);
+        }
+
+        const safeUrl = escapeHtml(url.href);
+        return `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${escapeHtml(part)}</a>`;
+      } catch (_error) {
+        return escapeHtml(part);
+      }
+    })
+    .join("")
+    .replace(/\n/g, "<br>");
+}
+
+function renderPostBody(value) {
+  return `<p class="post-copy">${renderLinkedText(value)}</p>`;
+}
+
+function getRecoveryStages(form) {
+  return Array.from(form.querySelectorAll("[data-recovery-stage]"))
+    .map((stage, index) => {
+      const from = stage.querySelector('[name="recovery-from"]')?.value || "";
+      const to = stage.querySelector('[name="recovery-to"]')?.value || "";
+      const pain = stage.querySelector('[name="recovery-pain"]')?.value || "";
+      const used = stage.querySelector('[name="recovery-used"]')?.value.trim() || "";
+      const links = Array.from(stage.querySelectorAll('[name="recovery-link"]'))
+        .map((field) => field.value.trim())
+        .filter(Boolean);
+
+      if (!from && !to && !pain && !used && !links.length) return "";
+
+      return [
+        `Period ${index + 1}`,
+        `Dates: ${from || "unspecified"} to ${to || "unspecified"}`,
+        pain ? `Pain level: ${pain}/10` : "",
+        used ? `During this period I used: ${used}` : "",
+        links.length ? `Helpful links:\n${links.map((link) => `- ${link}`).join("\n")}` : "",
+      ].filter(Boolean).join("\n");
+    })
+    .filter(Boolean);
+}
+
+function composeStoryBody(form) {
+  const details = storyBodyInput?.value.trim() || "";
+  const stages = getRecoveryStages(form);
+
+  if (!stages.length) return details;
+
+  return `${details}\n\nRecovery timeline\n\n${stages.join("\n\n")}`;
+}
+
+function clearRecoveryStage(stage) {
+  stage.querySelectorAll("input, textarea").forEach((field) => {
+    field.value = "";
+  });
+}
+
+function resetRecoveryLinks(stage) {
+  const linksContainer = stage.querySelector("[data-recovery-links]");
+  const linkLabels = Array.from(linksContainer?.querySelectorAll("label") || []);
+  const firstLabel = linkLabels[0];
+
+  linkLabels.slice(1).forEach((label) => label.remove());
+  firstLabel?.querySelector("input")?.removeAttribute("aria-label");
+}
+
+function resetRecoveryTimeline(form) {
+  const stages = Array.from(form.querySelectorAll("[data-recovery-stage]"));
+  const firstStage = stages[0];
+
+  stages.slice(1).forEach((stage) => stage.remove());
+  if (firstStage) {
+    clearRecoveryStage(firstStage);
+    resetRecoveryLinks(firstStage);
+  }
+}
+
+addRecoveryStageButton?.addEventListener("click", () => {
+  const timeline = document.querySelector("[data-recovery-timeline]");
+  const firstStage = timeline?.querySelector("[data-recovery-stage]");
+
+  if (!timeline || !firstStage) return;
+
+  const newStage = firstStage.cloneNode(true);
+  clearRecoveryStage(newStage);
+  resetRecoveryLinks(newStage);
+  timeline.appendChild(newStage);
+  newStage.querySelector("input, textarea")?.focus();
+});
+
+document.addEventListener("click", (event) => {
+  const addLinkButton = event.target.closest("[data-add-recovery-link]");
+
+  if (!addLinkButton) return;
+
+  const stage = addLinkButton.closest("[data-recovery-stage]");
+  const linksContainer = stage?.querySelector("[data-recovery-links]");
+  const firstLabel = linksContainer?.querySelector("label");
+
+  if (!linksContainer || !firstLabel) return;
+
+  const newLabel = firstLabel.cloneNode(true);
+  const input = newLabel.querySelector("input");
+
+  if (input) {
+    input.value = "";
+    input.setAttribute("aria-label", "Additional helpful link");
+  }
+
+  linksContainer.appendChild(newLabel);
+  input?.focus();
+});
+
 function renderForumPosts(posts) {
   if (!forumPostList) return;
 
@@ -1479,7 +1690,7 @@ function renderForumPosts(posts) {
           <div class="post-body">
             <p class="post-meta">${escapeHtml(meta)}</p>
             <h2>${escapeHtml(post.title)}</h2>
-            <p>${escapeHtml(post.body)}</p>
+            ${renderPostBody(post.body)}
             <div class="post-actions">
               <span>${commentCount} comments</span>
               <span>${escapeHtml(category)}</span>
@@ -1515,6 +1726,68 @@ async function loadForumPosts(session) {
   renderForumPosts(data || []);
 }
 
+storySubmitForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!supabaseClient || !storyTitleInput || !storyBodyInput) return;
+
+  const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+  const session = sessionData?.session || getStoredSession();
+  const user = session?.user;
+
+  if (sessionError || !user) {
+    rememberRedirectUrl(getCurrentPageAuthRedirectUrl());
+    window.location.href = getForumLink();
+    return;
+  }
+
+  const title = storyTitleInput.value.trim();
+  const body = composeStoryBody(storySubmitForm).trim();
+  const category = storyCategoryInput?.value || "Story";
+  const defaultSubmitText = storySubmitButton?.textContent || "Create story";
+
+  if (!title || !body) {
+    setMessage("Add a title and story details before creating your story.", true);
+    return;
+  }
+
+  if (storySubmitButton) {
+    storySubmitButton.disabled = true;
+    storySubmitButton.textContent = "Creating...";
+  }
+
+  const { error } = await supabaseClient
+    .from("forum_posts")
+    .insert({
+      user_id: user.id,
+      title: title.slice(0, 120),
+      body: body.slice(0, 10000),
+      category,
+    });
+
+  if (storySubmitButton) {
+    storySubmitButton.disabled = false;
+    storySubmitButton.textContent = defaultSubmitText;
+  }
+
+  if (error) {
+    setMessage("Unable to create your story. Please try again.", true);
+    return;
+  }
+
+  if (forumPostList) {
+    storySubmitForm.reset();
+    resetRecoveryTimeline(storySubmitForm);
+    storySubmitForm.hidden = true;
+    setMessage("Story shared.");
+    loadForumPosts(session);
+    return;
+  }
+
+  setMessage("Story created. Opening the forum.");
+  window.location.href = getForumLink();
+});
+
 function updateAuthUI(session) {
   if (hasAuthErrorInUrl()) {
     session = null;
@@ -1523,6 +1796,14 @@ function updateAuthUI(session) {
   currentSessionUser = session?.user || null;
 
   if (redirectFirstSocialLoginHome(session)) {
+    return;
+  }
+
+  if (redirectToLoginForStorySubmission(session)) {
+    return;
+  }
+
+  if (redirectAfterLoginIfNeeded(session)) {
     return;
   }
 
@@ -1539,7 +1820,6 @@ function updateAuthUI(session) {
   updateNavAuthUI(session);
   updateProfileAvatars(session);
   updateProfileFields(session);
-  redirectAfterLoginIfNeeded(session);
 
   const isSignedIn = Boolean(session?.user);
   const email = session?.user?.email;
@@ -1967,7 +2247,7 @@ profilePasswordSave?.addEventListener("click", async () => {
       ? "Password updated. Use your email address and new password next time you log in."
       : "Profile setup saved. You can now log in with email and password."
   );
-  window.location.href = "forum-for-discussion.html";
+  window.location.href = consumePostLoginRedirect(getForumLink());
 });
 
 profileDetailsSave?.addEventListener("click", async () => {

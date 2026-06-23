@@ -6,9 +6,9 @@
   <meta http-equiv="Cache-Control" content="no-store">
   <meta name="description" content="Guidance for documenting and reporting an invisible workplace injury.">
   <title>Submit a Story | Invisible Incident</title>
-  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles.css?v=16">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../auth.js" defer></script>
+  <script src="../auth.js?v=16" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -36,6 +36,73 @@
         <p class="eyebrow">Documentation</p>
         <h1 id="page-title">Submit a Story</h1>
         <p>Use clear records, dates, symptoms, and witness information to make an invisible injury easier to explain and verify.</p>
+      </div>
+    </section>
+
+    <section class="forum-board" id="signed-in-view" aria-labelledby="story-form-title" hidden>
+      <div class="forum-shell">
+        <div class="forum-header">
+          <div>
+            <p class="section-kicker">Community Story</p>
+            <h2 id="story-form-title">Create your story</h2>
+            <p>Your story will be shared with authenticated members on the Forum for Discussion page.</p>
+          </div>
+          <a class="profile-shortcut" href="../forum-for-discussion.html">Forum</a>
+        </div>
+
+        <form class="composer-panel" id="story-submit-form">
+          <label for="story-title">Story title</label>
+          <input id="story-title" name="story-title" type="text" maxlength="120" placeholder="A clear title for your experience" required>
+
+          <label for="story-category">Story category</label>
+          <select id="story-category" name="story-category" required>
+            <option value="Story">Story</option>
+            <option value="Hearing Injury">Hearing Injury</option>
+            <option value="Head and Cognitive Injury">Head and Cognitive Injury</option>
+            <option value="Stress-Related Harm">Stress-Related Harm</option>
+            <option value="Workplace Support">Workplace Support</option>
+          </select>
+
+          <label for="story-body">Story details</label>
+          <textarea id="story-body" name="story-body" rows="8" maxlength="8000" placeholder="Share what happened, what symptoms followed, and what support or documentation helped." required></textarea>
+
+          <fieldset class="recovery-timeline" data-recovery-timeline>
+            <legend>Recovery timeline</legend>
+            <div class="recovery-stage" data-recovery-stage>
+              <div class="recovery-date-row">
+                <label>
+                  From date
+                  <input type="date" name="recovery-from">
+                </label>
+                <label>
+                  To date
+                  <input type="date" name="recovery-to">
+                </label>
+              </div>
+              <label>
+                Pain level
+                <input type="number" name="recovery-pain" min="0" max="10" placeholder="0-10">
+              </label>
+              <label>
+                During this period I used
+                <textarea name="recovery-used" rows="3" placeholder="Treatments, accommodations, tools, routines, support, or notes"></textarea>
+              </label>
+              <div class="recovery-links" data-recovery-links>
+                <label>
+                  Helpful link
+                  <input type="url" name="recovery-link" placeholder="https://example.com/resource">
+                </label>
+              </div>
+              <button class="secondary-composer-button recovery-link-button" data-add-recovery-link type="button">Add link</button>
+            </div>
+          </fieldset>
+
+          <button class="secondary-composer-button" data-add-recovery-stage type="button">Add recovery period</button>
+
+          <button id="story-submit-button" type="submit">Create story</button>
+        </form>
+
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
       </div>
     </section>
 
